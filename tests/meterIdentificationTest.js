@@ -17,12 +17,12 @@ describe('test suite: test_as_anuzwuB', () => {
       identification_attempt_count: 0
     };
     const VT = new VerseTester(verseDetails);
-    const input_string = ```
+    const input_string = `
       yadA yadA hi Darmasya
       glAnirBavati BArata
       aByutTAnamaDarmasya
       tadAtmAnaM sfjAmyaham
-    ```;
+    `;
     const V = S.scan(input_string, from_scheme='SLP');
     VT.test_as_anuzwuB(V);
     const output = V.meter_label;

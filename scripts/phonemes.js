@@ -34,7 +34,7 @@ const SLP_chars = Roman_upper.filter((letter) => {
   return (letter !== 'L') && (letter !== 'V') && (letter !== 'Z');
 }).concat(Roman_lower);
 
-const character_set = {
+export const character_set = {
   'SLP': SLP_chars
   // 'IAST': IAST_chars,
   // 'HK': HK_chars,

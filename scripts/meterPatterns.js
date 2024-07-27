@@ -4,14 +4,14 @@
 
 // traditional "gaṇa" trisyllable abbreviation scheme
 export const gaRas_by_weights = {
-  lgg : 'y', // bacchius (yagan)
-  ggg : 'm', // molossus (magan)
-  ggl : 't', // antibacchius (tagan)
-  glg : 'r', // cretic or amphimacer (ragan)
-  lgl : 'j', // amphibrach (jagan)
-  gll : 'B', // dactyl (bhagan)
-  lll : 'n', // tribrach (nagan)
-  llg : 's', // anapest or antidactylus (sagan)
+  'lgg' : 'y', // bacchius (yagan)
+  'ggg' : 'm', // molossus (magan)
+  'ggl' : 't', // antibacchius (tagan)
+  'glg' : 'r', // cretic or amphimacer (ragan)
+  'lgl' : 'j', // amphibrach (jagan)
+  'gll' : 'B', // dactyl (bhagan)
+  'lll' : 'n', // tribrach (nagan)
+  'llg' : 's', // anapest or antidactylus (sagan)
 };
 
 /* 

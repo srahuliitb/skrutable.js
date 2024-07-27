@@ -1,4 +1,4 @@
-# Skrutable JavaScipt
+# Skrutable JavaScript
 
 This is an attempt to reproduce the Skrutable APIs (https://github.com/tylergneill/skrutable/) in JavaScript.
 

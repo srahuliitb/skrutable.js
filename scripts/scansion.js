@@ -1,6 +1,6 @@
 import * as mp from './meterPatterns.js';
 import { config } from './config.js';
-import { SLP_vowels, SLP_consonants_for_scansion, character_set } from './phonemes.js';
+import { SLP_long_vowels, SLP_vowels, SLP_consonants_for_scansion, character_set } from './phonemes.js';
 
 const scansion_syllable_separator = config["scansion_syllable_separator"] // e.g. " "
 const additional_pAda_separators = config["additional_pAda_separators"]  // e.g. ["\t", ";"]
@@ -153,6 +153,50 @@ export class Scanner {
   }
 
   scan_syllable_weights(txt_syl) {
+    /*
+    Accepts (newline-separated) multi-line string of text
+		which is syllabified with scansion_syllable_separator.
+
+		Returns corresponding multi-line string light/heavy (l/g) pattern.
+    */
+
+    // treat lines individually (newlines to be restored upon return)
+    const text_lines = txt_syl.split('\n');
+    const weights_by_line = [];
+
+    for (const line of text_lines) {
+      let line_weights = '';
+      const syllables = line.split(scansion_syllable_separator);
+  
+      while (syllables.length > 0 && syllables[syllables.length - 1] === '') {
+        syllables.pop(); // in case of final separator(s)
+      }
+
+      for (let n = 0; n < syllables.length; n++) {
+        const syllable = syllables[n];
+  
+        if (
+          // heavy by nature
+          SLP_long_vowels.includes(syllable[syllable.length - 1]) || syllable[syllable.length - 1] === 'M' || syllable[syllable.length - 1] === 'H' ||
+  
+          // heavy by position
+          SLP_consonants_for_scansion.includes(syllable[syllable.length - 1]) ||
+          (n < syllables.length - 2 && syllables[n + 1].length > 1 && SLP_consonants_for_scansion.includes(syllables[n + 1][1]))
+        ) {
+          line_weights += 'g';
+          // line_weights += 'g_'; // for visual alignment
+          // insofar as two 'l's can equal one 'g', could use this alternative for better visual alignment
+        } else {
+          line_weights += 'l';
+        }
+      }
+  
+      weights_by_line.push(line_weights);
+    }
+  
+    const syllable_weights = weights_by_line.join('\n');
+    return syllable_weights;
+
     // TODO
   }
 
@@ -192,5 +236,8 @@ let input_string = `
 
 sc.clean_input(input_string, 'SLP');
 console.log(input_string);
-console.log(sc.syllabify_text(input_string));
+const syllabified_text = sc.syllabify_text(input_string);
+console.log(syllabified_text);
+const syllable_weights = sc.scan_syllable_weights(syllabified_text);
+console.log(syllable_weights);
 */

@@ -1,7 +1,7 @@
 // import * as sm from './schemeMaps.js';
 
 const SLP_short_vowels = ['a','i','u','f','x','ĕ','ŏ']; // latter two exceptions for one-char principle
-const SLP_long_vowels = ['A','I','U','F','X','e','E','o','O'];
+export const SLP_long_vowels = ['A','I','U','F','X','e','E','o','O'];
 export const SLP_vowels = SLP_short_vowels.concat(SLP_long_vowels);
 
 const SLP_vowels_with_mAtrAs = SLP_vowels.slice(1, ); // exclude 'a'

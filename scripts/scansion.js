@@ -28,20 +28,6 @@ export class Verse {
   gaRa_abbreviations;	// string, may contain newlines
   meter_label; // string	
   identification_score = 0;
-
-  /*
-  constructor(verseProps) {
-    this.text_raw = verseProps.text_raw;
-    this.original_scheme = verseProps.original_schemel;
-    this.text_cleaned = verseProps.text_cleaned;
-    this.text_SLP = verseProps.text_SLP;
-    this.text_syllabified = verseProps.text_syllabified;
-    this.syllable_weights = verseProps.syllable_weights;
-    this.morae_per_line = verseProps.morae_per_line;
-    this.gaRa_abbreviations = verseProps.gaRa_abbreviations;
-    this.meter_label = verseProps.meter_label;
-  }
-  */
 }
 
 export class Scanner {
@@ -102,7 +88,7 @@ export class Scanner {
 
     // e.g. text == 'yadA yadA hi Darmasya glAnir Bavati BArata /\naByutTAnam aDarmasya...'
     // final cleaning for scansion: irrelevant horizontal white space
-    txt_SLP = txt_SLP.replace(/\s/g, '');
+    txt_SLP = txt_SLP.replace(/ /g, '');
     txt_SLP = txt_SLP.replace(/\t/g, '');
     // e.g. 'yadAyadAhiDarmasyaglAnirBavatiBArata\naByutTAnamaDarmasya...'
 
@@ -139,12 +125,13 @@ export class Scanner {
           // final separator is incorrect, remove
           const final_separator = line_syllables.lastIndexOf(scansion_syllable_separator);
           line_syllables = line_syllables.slice(0, final_separator) + line_syllables.slice(final_separator + 1);
+          line_syllables += scansion_syllable_separator;
         }
       } catch (error) {
         console.log('IndexError encounted!');
       }
 
-      line_syllables += scansion_syllable_separator;
+      // line_syllables += scansion_syllable_separator;
       syllables_by_line.push(line_syllables);
     }
 
@@ -196,31 +183,81 @@ export class Scanner {
   
     const syllable_weights = weights_by_line.join('\n');
     return syllable_weights;
-
-    // TODO
   }
 
   count_morae(syl_wts) {
     // TODO
+    /*
+    Accepts (newline-separated) multi-line string of text
+		detailing light/heavy (l/g) pattern.
+
+		Returns list with length equal to number of lines in argument
+		and containing number of morae found in each line.
+    */
+    
+    const morae_per_line = [];
+    const weights_by_line = syl_wts.split('\n');
+
+    for (const line of weights_by_line) {
+      const laghu_count = line.split('l').length - 1;
+      const guru_count = line.split('g').length - 1;
+      morae_per_line.push(laghu_count * 1 + guru_count * 2);
+    }
+
+    return morae_per_line;
   }
 
   gaRa_abbreviate(syl_wts) {
-    // TODO
+    /*
+		Accepts one-line string of light/heavy (l/g) pattern, e.g., 'lllgggl'.
+
+		Returns string of 'gaRa'-trisyllable abbreviation, e.g. 'nml'.
+		*/
+
+		const unique_weights = [...new Set(syl_wts)];
+    const clean_weights = new Set();
+
+    for (const element of unique_weights) {
+      if (element === 'l' || element === 'g') {
+        clean_weights.add(element);
+      }
+    }
+
+    for (const c of clean_weights) {
+      if (c !== 'l' && c !== 'g') {
+        return null;
+      }
+    }
+
+    let weights_of_curr_gaRa = '';
+    let overall_abbreviation = '';
+
+    for (const single_weight of syl_wts) {
+      weights_of_curr_gaRa += single_weight;
+      if (weights_of_curr_gaRa.length === 3) {
+        overall_abbreviation += mp.gaRas_by_weights[weights_of_curr_gaRa];
+        weights_of_curr_gaRa = '';
+      }
+    }
+
+    overall_abbreviation += weights_of_curr_gaRa;
+		return overall_abbreviation;
   }
 
   scan(cntnts) {
     let V = new Verse();
     V.text_raw = cntnts;
-    V.text_cleaned = this.clean_input(V.text_raw, 'SLP')
-
-		V.text_syllabified = this.syllabify_text(V.text_SLP)
-		V.syllable_weights = self.scan_syllable_weights(V.text_syllabified)
-		V.morae_per_line = self.count_morae(V.syllable_weights)
-    //TODO
-
-
+    V.text_cleaned = this.clean_input(V.text_raw, 'SLP');
+		V.text_syllabified = this.syllabify_text(V.text_cleaned);
+		V.syllable_weights = this.scan_syllable_weights(V.text_syllabified);
+		V.morae_per_line = this.count_morae(V.syllable_weights);
+    const temp = [];
+    for (const line of V.syllable_weights.split('\n')) {
+      temp.push(this.gaRa_abbreviate(line));
+    }
+    V.gaRa_abbreviations = temp.join('\n');
     this.Verse = V
-    return V
+    return V;
   }
 
 }
@@ -236,8 +273,20 @@ let input_string = `
 
 sc.clean_input(input_string, 'SLP');
 console.log(input_string);
+
 const syllabified_text = sc.syllabify_text(input_string);
 console.log(syllabified_text);
+
 const syllable_weights = sc.scan_syllable_weights(syllabified_text);
 console.log(syllable_weights);
+
+const morae_per_line = sc.count_morae(syllable_weights);
+console.log(morae_per_line);
+
+syllable_weights.split('\n').forEach((w) => {
+  const overall_abbreviation = sc.gaRa_abbreviate(w);
+  console.log(overall_abbreviation);
+})
+
+console.log(sc.scan(input_string));
 */

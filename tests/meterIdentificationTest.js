@@ -23,9 +23,10 @@ describe('test suite: test_as_anuzwuB', () => {
       aByutTAnamaDarmasya
       tadAtmAnaM sfjAmyaham
     `;
-    const V = S.scan(input_string, from_scheme='SLP');
+    const V = scanner.scan(input_string);
     VT.test_as_anuzwuB(V);
     const output = V.meter_label;
+    console.log(output);
     const expected_output = "anuṣṭubh (1,2: pathyā, 3,4: pathyā)";
     expect(output).toEqual(expected_output);
   });

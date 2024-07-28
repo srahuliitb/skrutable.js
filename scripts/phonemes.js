@@ -2,7 +2,7 @@
 
 const SLP_short_vowels = ['a','i','u','f','x','ĕ','ŏ']; // latter two exceptions for one-char principle
 const SLP_long_vowels = ['A','I','U','F','X','e','E','o','O'];
-const SLP_vowels = SLP_short_vowels.concat(SLP_long_vowels);
+export const SLP_vowels = SLP_short_vowels.concat(SLP_long_vowels);
 
 const SLP_vowels_with_mAtrAs = SLP_vowels.slice(1, ); // exclude 'a'
 
@@ -15,7 +15,7 @@ const SLP_consonants = SLP_unvoiced_consonants.concat(SLP_voiced_consonants);
 // Voice distinguished for sake of destroy_spaces functionality.
 // For transliteration, 'consonant' means 'needs virāma if non-vowel follows' (no M H)
 
-const SLP_consonants_for_scansion = SLP_consonants;
+export const SLP_consonants_for_scansion = SLP_consonants;
 // For scansion, 'consonant' means 'contributes to heaviness of previous vowel' (yes M H)
 
 // build character sets for use in cleaning for scansion

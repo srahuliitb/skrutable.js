@@ -1,6 +1,5 @@
 import { Scanner } from '../scripts/scansion.js';
 import { VerseTester } from '../scripts/meterIdentification.js';
-import * as mp from '../scripts/meterPatterns.js';
 import { config } from '../scripts/config.js';
 
 describe('test suite: test_as_anuzwuB', () => {

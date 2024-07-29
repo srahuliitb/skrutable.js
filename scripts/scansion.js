@@ -52,25 +52,32 @@ export class Scanner {
 		Returns result as string.
     */
 
-    // manage additional newlines
-    additional_pAda_separators.forEach((chr) => {
-      cntnts = cntnts.replace(/chr/, '\n');
+    const unique_chars = [...new Set(cntnts)];    
+    additional_pAda_separators.forEach((c) => {
+      if (unique_chars.includes(c)) {
+        if (c === '|') {
+          cntnts = cntnts.replace(/\|/g, '');
+        }
+        cntnts = cntnts.replace(new RegExp(c, 'g'), '');
+      }
     });
+
+    // trim each line to remove extra whitespaces
+    const output_string = cntnts.split('\n').map(line => line.trim()).join('\n');
+    cntnts = output_string;
 
 		// also dedupe, also allowing for carriage returns introduced in HTML form input
 		// Replace multiple newlines with a single newline
-    const regex = /\n{2,}/g;
-    cntnts = cntnts.replace(regex, '\n');
+    cntnts = cntnts.replace(/\n{2,}/g, '\n');
 
     // Remove leading and trailing whitespace
     cntnts = cntnts.trim();
 
 		// filter out disallowed characters just for SLP
-    const unique_chars = [...new Set(cntnts)];
-  
+    // const unique_chars = [...new Set(cntnts)];
 		unique_chars.forEach((c) => {
-      if (!(c in character_set[scheme_in])) {
-        cntnts = cntnts.replace(/c/, '');
+      if (!character_set[scheme_in].includes(c)) {
+        cntnts = cntnts.replace(new RegExp(c, 'g'), '');
       }
     });
     
@@ -119,7 +126,6 @@ export class Scanner {
 
       // e.g. 'ya.dA.ya.dA.hi.Da.rma.sya.glA.ni.rBa.va.ti.BA.ra.ta.'
 			// BUT e.g. 'a.Byu.tTA.na.ma.Da.rma.sya.ta.dA.tmA.na.Msf.jA.mya.ha.m'
-
       try {
         // Remove final scansion_syllable_separator before final consonants
         if (line_syllables.endsWith(...SLP_consonants_for_scansion)) {

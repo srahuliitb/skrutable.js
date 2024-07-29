@@ -141,7 +141,7 @@ export class VerseTester {
   }
 
 }
-
+/*
 const sc = new Scanner();
 let input_string = `
   yadA yadA hi Darmasya
@@ -150,33 +150,36 @@ let input_string = `
   tadAtmAnaM sfjAmyaham
 `;
 
-// sc.clean_input(input_string, 'SLP');
-// console.log(input_string);
+const clean_text = sc.clean_input(input_string, 'SLP');
+console.log(clean_text);
 
-// const syllabified_text = sc.syllabify_text(input_string);
-// console.log(syllabified_text);
+const syllabified_text = sc.syllabify_text(clean_text);
+console.log(syllabified_text);
+*/
 
-// const syllable_weights = sc.scan_syllable_weights(syllabified_text);
-// console.log(syllable_weights);
+/*
+const syllable_weights = sc.scan_syllable_weights(syllabified_text);
+console.log(syllable_weights);
 
-// const morae_per_line = sc.count_morae(syllable_weights);
-// console.log(morae_per_line);
+const morae_per_line = sc.count_morae(syllable_weights);
+console.log(morae_per_line);
 
-// syllable_weights.split('\n').forEach((w) => {
-//   const overall_abbreviation = sc.gaRa_abbreviate(w);
-//   console.log(overall_abbreviation);
-// })
+syllable_weights.split('\n').forEach((w) => {
+  const overall_abbreviation = sc.gaRa_abbreviate(w);
+  console.log(overall_abbreviation);
+})
 
 const verse = sc.scan(input_string);
 console.log(verse);
 
 const verseTester = new VerseTester(default_resplit_option, default_resplit_keep_midpoint);
 
-// const result1 = verseTester.test_as_anuzwuB_half('lglglgll', 'gglllgll');
-// console.log(result1);
+const result1 = verseTester.test_as_anuzwuB_half('lglglgll', 'gglllgll');
+console.log(result1);
 
-// const result2 = verseTester.test_as_anuzwuB_half('gggllgll', 'lggglgllg');
-// console.log(result1);
+const result2 = verseTester.test_as_anuzwuB_half('gggllgll', 'lggglgllg');
+console.log(result1);
 
 const result3 = verseTester.test_as_anuzwuB(verse);
 console.log(result3);
+*/

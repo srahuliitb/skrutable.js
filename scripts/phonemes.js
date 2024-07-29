@@ -30,9 +30,11 @@ for (let i = 97; i < 123; i++) {
   Roman_lower.push(String.fromCharCode(i));
 }
 
-const SLP_chars = Roman_upper.filter((letter) => {
+const Roman_upper_filtered =  Roman_upper.filter((letter) => {
   return (letter !== 'L') && (letter !== 'V') && (letter !== 'Z');
-}).concat(Roman_lower);
+});
+
+const SLP_chars = Roman_upper_filtered.concat(Roman_lower);
 
 export const character_set = {
   'SLP': SLP_chars

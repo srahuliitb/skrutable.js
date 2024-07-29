@@ -1,5 +1,6 @@
 import * as mp from './meterPatterns.js';
 import { config } from './config.js';
+import { Verse, Scanner } from './scansion.js';
 
 // console.log(config)
 const scansion_syllable_separator = config["scansion_syllable_separator"]; // e.g. " "
@@ -27,9 +28,9 @@ export class VerseTester {
   resplit_keep_midpoint // Boolean
   identification_attempt_count = 0;
   
-  constructor(verseDetails) {
-    self.resplit_option = verseDetails.resplit_option;
-    self.resplit_keep_midpoint = verseDetails.resplit_keep_midpoint;
+  constructor(resplit_option, resplit_keep_midpoint) {
+    self.resplit_option = resplit_option;
+    self.resplit_keep_midpoint = resplit_keep_midpoint;
   }
 
   combine_results(Vrs, new_label, new_score) {
@@ -60,32 +61,122 @@ export class VerseTester {
      * Tries to match to known odd-even 'anuṣṭubh' foot pairings:
      *  pathya
      *  vipulā (4.5 subtypes: na, ra, ma, bha, and variant bha).
-     * Returns string result if match found, None otherwise.
+     * Returns string result if match found, null otherwise.
      */
-    
+
     // check even pāda
-    const even_anuzwuB_pAda = mp.even_anuzwuB_pAda;
-		const regex = re.compile(even_anuzwuB_pAda);
-		if (!re.match(regex, even_pAda_weights)) {
-      return undefined;
+    // console.log(`Even weight = ${even_pAda_weights}`);
+    const even_pAda_regex = new RegExp(mp.even_anuzwuB_pAda);
+    // console.log(`Regex check: ${even_pAda_regex.test(even_pAda_weights)}`);
+    if (!even_pAda_regex.test(even_pAda_weights)) {
+      return null;
     }
 
 		// check odd pāda (both 'paTyA' and 'vipulA')
-		const odd_anuzwuB_pAda = mp.odd_anuzwuB_pAda;
-    for (const weights_pattern in odd_anuzwuB_pAda) {
-      const regex = re.compile(weights_pattern[weights_pattern][0]);
-      if (re.match(regex, odd_pAda_weights)) {
-        return odd_anuzwuB_pAda[weights_pattern];
+    // console.log(`Odd weight = ${odd_pAda_weights}`);
+    for (const weights_pattern in mp.odd_anuzwuB_pAda) {
+      const odd_pAda_regex = new RegExp(weights_pattern);
+      // console.log(odd_pAda_regex);
+      // console.log(`Odd pAda Regex check: ${odd_pAda_regex.test(odd_pAda_weights)}`);
+      if (odd_pAda_regex.test(odd_pAda_weights)) {
+        return mp.odd_anuzwuB_pAda[weights_pattern];
       }
     }
 
-    return undefined;
+    return null;
   }
 
   test_as_anuzwuB(Vrs) {
+    /*
+    Accepts Verse object.
+		Determines whether first four lines of Verse's syllable_weights is anuṣṭubh.
+		Internally sets Verse parameters if identified as such.
+		Tests halves ab and cd independently, reports if either half found to be valid.
+		Returns 1 if anuṣṭubh, or 0 if not.
+    */
+
+    const w_p = Vrs.syllable_weights.split('\n'); // weights by pāda  
     
+    try {
+      const fourth_pAda = w_p[3];
+    } catch (IndexError) {
+      console.log('The verse does not have all 4 pAdas');
+    }
+
+    // test each half
+		let pAdas_ab = this.test_as_anuzwuB_half(w_p[0], w_p[1]);
+		let pAdas_cd = this.test_as_anuzwuB_half(w_p[2], w_p[3]);
+    // console.log(pAdas_ab);
+    // console.log(pAdas_cd);
+
+    // report results
+		// both halves perfect
+    if (pAdas_ab !== null && pAdas_cd !== null) {
+      Vrs.meter_label = `anuṣṭubh (1,2: ${pAdas_ab}, 3,4: ${pAdas_cd})`;
+			Vrs.identification_score = meter_scores["anuṣṭubh, full, both halves perfect)"];
+			return 1;
+    } else if (pAdas_ab === null && pAdas_cd !== null) {
+      Vrs.meter_label = `anuṣṭubh (1,2: asamīcīna, 3,4: ${pAdas_cd})`;
+			Vrs.identification_score = meter_scores["anuṣṭubh, full, one half perfect, one imperfect)"];
+			return 1;
+    } else if (pAdas_ab !== null && pAdas_cd == null) {
+      Vrs.meter_label = `anuṣṭubh (1,2: ${pAdas_ab}, 3,4: asamīcīna)`;
+			Vrs.identification_score = meter_scores["anuṣṭubh, full, one half perfect, one imperfect)"];
+			return 1;
+    }
+
+    // currently cannot do both halves imperfect
+		// also test whether just a single perfect half
+    pAdas_ab = this.test_as_anuzwuB_half(w_p[0] + w_p[1], w_p[2] + w_p[3]);
+    
+		if (pAdas_ab !== null) {
+			Vrs.meter_label = `anuṣṭubh (ardham eva: ${pAdas_ab})`;
+			Vrs.identification_score = meter_scores["anuṣṭubh, half, single half perfect)"];
+			return 1;
+    }
+		
+    // currently cannot do just a single imperfect half
+
+		return 0;
   }
 
 }
 
+const sc = new Scanner();
+let input_string = `
+  yadA yadA hi Darmasya
+  glAnirBavati BArata
+  aByutTAnamaDarmasya
+  tadAtmAnaM sfjAmyaham
+`;
 
+// sc.clean_input(input_string, 'SLP');
+// console.log(input_string);
+
+// const syllabified_text = sc.syllabify_text(input_string);
+// console.log(syllabified_text);
+
+// const syllable_weights = sc.scan_syllable_weights(syllabified_text);
+// console.log(syllable_weights);
+
+// const morae_per_line = sc.count_morae(syllable_weights);
+// console.log(morae_per_line);
+
+// syllable_weights.split('\n').forEach((w) => {
+//   const overall_abbreviation = sc.gaRa_abbreviate(w);
+//   console.log(overall_abbreviation);
+// })
+
+const verse = sc.scan(input_string);
+console.log(verse);
+
+const verseTester = new VerseTester(default_resplit_option, default_resplit_keep_midpoint);
+
+// const result1 = verseTester.test_as_anuzwuB_half('lglglgll', 'gglllgll');
+// console.log(result1);
+
+// const result2 = verseTester.test_as_anuzwuB_half('gggllgll', 'lggglgllg');
+// console.log(result1);
+
+const result3 = verseTester.test_as_anuzwuB(verse);
+console.log(result3);

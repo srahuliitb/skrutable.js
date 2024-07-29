@@ -53,9 +53,9 @@ export class Scanner {
     */
 
     // manage additional newlines
-		for (const chr in additional_pAda_separators) {
-      cntnts = cntnts.replace(chr, '\n');
-    }
+    additional_pAda_separators.forEach((chr) => {
+      cntnts = cntnts.replace(/chr/, '\n');
+    });
 
 		// also dedupe, also allowing for carriage returns introduced in HTML form input
 		// Replace multiple newlines with a single newline
@@ -66,14 +66,15 @@ export class Scanner {
     cntnts = cntnts.trim();
 
 		// filter out disallowed characters just for SLP
-    const uniqueCharactersArray = [...new Set(cntnts)];
-		uniqueCharactersArray.forEach((c) => {
+    const unique_chars = [...new Set(cntnts)];
+  
+		unique_chars.forEach((c) => {
       if (!(c in character_set[scheme_in])) {
-        cntnts = cntnts.replace(c, '');
+        cntnts = cntnts.replace(/c/, '');
       }
     });
     
-		return cntnts
+		return cntnts;
   }
 
   syllabify_text(txt_SLP) {
@@ -248,7 +249,8 @@ export class Scanner {
     let V = new Verse();
     V.text_raw = cntnts;
     V.text_cleaned = this.clean_input(V.text_raw, 'SLP');
-		V.text_syllabified = this.syllabify_text(V.text_cleaned);
+    V.text_SLP = V.text_cleaned;
+		V.text_syllabified = this.syllabify_text(V.text_SLP);
 		V.syllable_weights = this.scan_syllable_weights(V.text_syllabified);
 		V.morae_per_line = this.count_morae(V.syllable_weights);
     const temp = [];

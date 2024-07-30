@@ -97,9 +97,8 @@ export class Scanner {
     // e.g. text == 'yadA yadA hi Darmasya glAnir Bavati BArata /\naByutTAnam aDarmasya...'
     // final cleaning for scansion: irrelevant horizontal white space
     txt_SLP = txt_SLP.replace(/ /g, '');
-    txt_SLP = txt_SLP.replace(/\t/g, '');
+    // txt_SLP = txt_SLP.replace(/\t/g, '');
     // e.g. 'yadAyadAhiDarmasyaglAnirBavatiBArata\naByutTAnamaDarmasya...'
-
     // treat lines individually (newlines to be restored upon return)
     const text_lines = txt_SLP.split('\n');
     const syllables_by_line = [];
@@ -124,19 +123,25 @@ export class Scanner {
         }
       }
 
+      console.log(line_syllables);
+
       // e.g. 'ya.dA.ya.dA.hi.Da.rma.sya.glA.ni.rBa.va.ti.BA.ra.ta.'
 			// BUT e.g. 'a.Byu.tTA.na.ma.Da.rma.sya.ta.dA.tmA.na.Msf.jA.mya.ha.m'
       try {
         // Remove final scansion_syllable_separator before final consonants
-        if (line_syllables.endsWith(...SLP_consonants_for_scansion)) {
-          // final separator is incorrect, remove
-          const final_separator = line_syllables.lastIndexOf(scansion_syllable_separator);
-          line_syllables = line_syllables.slice(0, final_separator) + line_syllables.slice(final_separator + 1);
-          line_syllables += scansion_syllable_separator;
-        }
+        const SLP_consonants_scansion_set = new Set(SLP_consonants_for_scansion);
+        SLP_consonants_scansion_set.forEach((c) => {
+          if (line_syllables.endsWith(c)) {
+            const final_separator = line_syllables.lastIndexOf(scansion_syllable_separator);
+            line_syllables = line_syllables.slice(0, final_separator) + line_syllables.slice(final_separator + 1);
+            line_syllables += scansion_syllable_separator;
+          }
+        });
       } catch (error) {
         console.log('IndexError encounted!');
       }
+
+      line_syllables = line_syllables.trim();
 
       // line_syllables += scansion_syllable_separator;
       syllables_by_line.push(line_syllables);

@@ -123,8 +123,6 @@ export class Scanner {
         }
       }
 
-      console.log(line_syllables);
-
       // e.g. 'ya.dA.ya.dA.hi.Da.rma.sya.glA.ni.rBa.va.ti.BA.ra.ta.'
 			// BUT e.g. 'a.Byu.tTA.na.ma.Da.rma.sya.ta.dA.tmA.na.Msf.jA.mya.ha.m'
       try {

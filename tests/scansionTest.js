@@ -35,4 +35,12 @@ describe('test suite: Scanner', () => {
     expect(output).toEqual(expected_output);
   });
 
+  it('should return a combination of l and g patters for each line', () => {
+    const clean_input = scanner.clean_input(input_string, 'SLP');
+    const syl_text = scanner.syllabify_text(clean_input);
+    const output = scanner.scan_syllable_weights(syl_text);
+    const expected_output = `lglglggl\ngglllgll\ngggllggl\nlggglglg`;
+    expect(output).toEqual(expected_output);
+  })
+
 });

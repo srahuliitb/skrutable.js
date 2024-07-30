@@ -164,24 +164,32 @@ export class Scanner {
     for (const line of text_lines) {
       let line_weights = '';
       const syllables = line.split(scansion_syllable_separator);
-  
+      
+      /*
+      console.log(syllables[syllables.length - 1]);
       while (syllables.length > 0 && syllables[syllables.length - 1] === '') {
         syllables.pop(); // in case of final separator(s)
       }
+        */
 
       for (let n = 0; n < syllables.length; n++) {
-        const syllable = syllables[n];
+        let last_index_char = syllables[n].charAt(syllables[n].length - 1);
   
         if (
           // heavy by nature
-          SLP_long_vowels.includes(syllable[syllable.length - 1]) || syllable[syllable.length - 1] === 'M' || syllable[syllable.length - 1] === 'H' ||
+          SLP_long_vowels.includes(last_index_char) || last_index_char === 'M' || last_index_char === 'H' ||
   
-          // heavy by position
-          SLP_consonants_for_scansion.includes(syllable[syllable.length - 1]) ||
-          (n < syllables.length - 2 && syllables[n + 1].length > 1 && SLP_consonants_for_scansion.includes(syllables[n + 1][1]))
+          // heavy by position:
+          // consonant closes syllable or is second letter of next syllable
+          SLP_consonants_for_scansion.includes(last_index_char) ||
+          
+          n <= (syllables.length - 2)
+          
+          && syllables[n + 1].length > 1
+
+          && SLP_consonants_for_scansion.includes(syllables[n + 1].charAt(1))
         ) {
           line_weights += 'g';
-          // line_weights += 'g_'; // for visual alignment
           // insofar as two 'l's can equal one 'g', could use this alternative for better visual alignment
         } else {
           line_weights += 'l';

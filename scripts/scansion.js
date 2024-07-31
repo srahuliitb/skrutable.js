@@ -74,7 +74,6 @@ export class Scanner {
     cntnts = cntnts.trim();
 
 		// filter out disallowed characters just for SLP
-    // const unique_chars = [...new Set(cntnts)];
 		unique_chars.forEach((c) => {
       if (!character_set[scheme_in].includes(c)) {
         cntnts = cntnts.replace(new RegExp(c, 'g'), '');

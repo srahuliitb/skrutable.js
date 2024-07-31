@@ -2,18 +2,11 @@ import * as mp from './meterPatterns.js';
 import { config } from './config.js';
 import { Verse, Scanner } from './scansion.js';
 
-// console.log(config)
 const scansion_syllable_separator = config["scansion_syllable_separator"]; // e.g. " "
 const default_resplit_option = config["default_resplit_option"]; // e.g. "none"
 const default_resplit_keep_midpoint = config["default_resplit_keep_midpoint"]; // e.g. True
 const disable_non_trizwuB_upajAti = config["disable_non_trizwuB_upajAti"]; // e.g. True
 const meter_scores = config["meter_scores"] // dict
-
-// console.log(scansion_syllable_separator);
-// console.log(default_resplit_option);
-// console.log(default_resplit_keep_midpoint);
-// console.log(disable_non_trizwuB_upajAti);
-// console.log(meter_scores);
 
 export class VerseTester {
   /**
@@ -55,7 +48,6 @@ export class VerseTester {
   }
 
   test_as_anuzwuB_half(odd_pAda_weights, even_pAda_weights) {
-    // TODO
     /**
      * Accepts two strings of syllable weights (e.g. 'llglgllg').
      * Tries to match to known odd-even 'anuṣṭubh' foot pairings:
@@ -65,19 +57,14 @@ export class VerseTester {
      */
 
     // check even pāda
-    // console.log(`Even weight = ${even_pAda_weights}`);
     const even_pAda_regex = new RegExp(mp.even_anuzwuB_pAda);
-    // console.log(`Regex check: ${even_pAda_regex.test(even_pAda_weights)}`);
     if (!even_pAda_regex.test(even_pAda_weights)) {
       return null;
     }
 
 		// check odd pāda (both 'paTyA' and 'vipulA')
-    // console.log(`Odd weight = ${odd_pAda_weights}`);
     for (const weights_pattern in mp.odd_anuzwuB_pAda) {
       const odd_pAda_regex = new RegExp(weights_pattern);
-      // console.log(odd_pAda_regex);
-      // console.log(`Odd pAda Regex check: ${odd_pAda_regex.test(odd_pAda_weights)}`);
       if (odd_pAda_regex.test(odd_pAda_weights)) {
         return mp.odd_anuzwuB_pAda[weights_pattern];
       }
@@ -106,8 +93,6 @@ export class VerseTester {
     // test each half
 		let pAdas_ab = this.test_as_anuzwuB_half(w_p[0], w_p[1]);
 		let pAdas_cd = this.test_as_anuzwuB_half(w_p[2], w_p[3]);
-    // console.log(pAdas_ab);
-    // console.log(pAdas_cd);
 
     // report results
 		// both halves perfect
@@ -141,6 +126,7 @@ export class VerseTester {
   }
 
 }
+
 /*
 const sc = new Scanner();
 let input_string = `
@@ -150,14 +136,13 @@ let input_string = `
   tadAtmAnaM sfjAmyaham
 `;
 
+
 const clean_text = sc.clean_input(input_string, 'SLP');
 console.log(clean_text);
 
 const syllabified_text = sc.syllabify_text(clean_text);
 console.log(syllabified_text);
-*/
 
-/*
 const syllable_weights = sc.scan_syllable_weights(syllabified_text);
 console.log(syllable_weights);
 
@@ -167,7 +152,7 @@ console.log(morae_per_line);
 syllable_weights.split('\n').forEach((w) => {
   const overall_abbreviation = sc.gaRa_abbreviate(w);
   console.log(overall_abbreviation);
-})
+});
 
 const verse = sc.scan(input_string);
 console.log(verse);

@@ -45,15 +45,18 @@ describe('test suite: Scanner class methods', () => {
     expect(output).toEqual(expected_output);
   });
 
-  /*
-  it('should return a string of gaRa abbreviations', () => {
+  
+  it('should return a multi-line string of gaRa abbreviations', () => {
     const clean_input = scanner.clean_input(input_string, 'SLP');
     const syl_text = scanner.syllabify_text(clean_input);
     const syl_weights = scanner.scan_syllable_weights(syl_text);
-    const output = scanner.gaRa_abbreviate(syl_weights);
+    const gaRa_abbreviations = [];
+    for (const line of syl_weights.split('\n')) {
+      gaRa_abbreviations.push(scanner.gaRa_abbreviate(line));
+    }
+    const output = gaRa_abbreviations.join('\n');
     const expected_output = "jrgl\ntsll\nmsgl\nyrlg";
     expect(output).toEqual(expected_output);
   });
-  */
 
 });

@@ -231,12 +231,12 @@ export class Scanner {
 		Returns string of 'gaRa'-trisyllable abbreviation, e.g. 'nml'.
 		*/
 
-		const unique_weights = [...new Set(syl_wts)];
-    const clean_weights = new Set();
+    const unique_weights = new Set(syl_wts);
+    const clean_weights = [];
 
     for (const element of unique_weights) {
       if (element === 'l' || element === 'g') {
-        clean_weights.add(element);
+        clean_weights.push(element);
       }
     }
 

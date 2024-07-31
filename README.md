@@ -6,4 +6,4 @@ Currently, only one method (`Scanner.test_as_anuzwuB`) is available which is to 
 
 `Scanner.test_as_anuzwuB` uses a helper method called `Scanner.test_as_anuzwuB_half`.
 
-**ll credits go to Tyler Neill (https://github.com/tylergneill) who originally developed the APIs in Python.*
+*All credits go to Tyler Neill (https://github.com/tylergneill) who originally developed the APIs in Python.*

@@ -13,50 +13,59 @@ describe('test suite: Scanner class methods', () => {
     scanner = new Scanner();
   });
 
-  it('should return a clean input', () => {    
-    const output = scanner.clean_input(input_string, 'SLP');
-    const expected_output = 'yadA yadA hi Darmasya\nglAnirBavati BArata\naByutTAnamaDarmasya\ntadAtmAnaM sfjAmyaham';
-
-    expect(output).toEqual(expected_output);
-  });
-
-  it('should return the syllabified text for a clean input text', () => {
-    const clean_input = scanner.clean_input(input_string, 'SLP');
-    const output = scanner.syllabify_text(clean_input);
-    const expected_output = `ya dA ya dA hi Da rma sya\nglA ni rBa va ti BA ra ta\na Byu tTA na ma Da rma sya\nta dA tmA naM sf jA mya ham`;
-
-    expect(output).toEqual(expected_output);
-  });
-
-  it('should return a combination of l and g patters for each line', () => {
-    const clean_input = scanner.clean_input(input_string, 'SLP');
-    const syl_text = scanner.syllabify_text(clean_input);
-    const output = scanner.scan_syllable_weights(syl_text);
-    const expected_output = `lglglggl\ngglllgll\ngggllggl\nlggglglg`;
-    expect(output).toEqual(expected_output);
-  });
-
-  it('should return an array of integers', () => {
-    const clean_input = scanner.clean_input(input_string, 'SLP');
-    const syl_text = scanner.syllabify_text(clean_input);
-    const syl_weights = scanner.scan_syllable_weights(syl_text);
-    const output = scanner.count_morae(syl_weights);
-    const expected_output = [12, 11, 13, 13];
-    expect(output).toEqual(expected_output);
-  });
-
+  describe('clean_input', () => {
+    it('should return a clean input', () => {    
+      const output = scanner.clean_input(input_string, 'SLP');
+      const expected_output = 'yadA yadA hi Darmasya\nglAnirBavati BArata\naByutTAnamaDarmasya\ntadAtmAnaM sfjAmyaham';
   
-  it('should return a multi-line string of gaRa abbreviations', () => {
-    const clean_input = scanner.clean_input(input_string, 'SLP');
-    const syl_text = scanner.syllabify_text(clean_input);
-    const syl_weights = scanner.scan_syllable_weights(syl_text);
-    const gaRa_abbreviations = [];
-    for (const line of syl_weights.split('\n')) {
-      gaRa_abbreviations.push(scanner.gaRa_abbreviate(line));
-    }
-    const output = gaRa_abbreviations.join('\n');
-    const expected_output = "jrgl\ntsll\nmsgl\nyrlg";
-    expect(output).toEqual(expected_output);
+      expect(output).toEqual(expected_output);
+    });
+  });
+
+  describe('syllabify_text', () => {
+    it('should return the syllabified text for a clean input text', () => {
+      const clean_input = scanner.clean_input(input_string, 'SLP');
+      const output = scanner.syllabify_text(clean_input);
+      const expected_output = `ya dA ya dA hi Da rma sya\nglA ni rBa va ti BA ra ta\na Byu tTA na ma Da rma sya\nta dA tmA naM sf jA mya ham`;
+  
+      expect(output).toEqual(expected_output);
+    });
+  });
+
+  describe('scan_syllable_weights', () => {
+    it('should return a combination of l and g patters for each line', () => {
+      const clean_input = scanner.clean_input(input_string, 'SLP');
+      const syl_text = scanner.syllabify_text(clean_input);
+      const output = scanner.scan_syllable_weights(syl_text);
+      const expected_output = `lglglggl\ngglllgll\ngggllggl\nlggglglg`;
+      expect(output).toEqual(expected_output);
+    });
+  });
+
+  describe('count_morae', () => {
+    it('should return an array of integers', () => {
+      const clean_input = scanner.clean_input(input_string, 'SLP');
+      const syl_text = scanner.syllabify_text(clean_input);
+      const syl_weights = scanner.scan_syllable_weights(syl_text);
+      const output = scanner.count_morae(syl_weights);
+      const expected_output = [12, 11, 13, 13];
+      expect(output).toEqual(expected_output);
+    });
+  });
+
+  describe('gaRa_abbreviate', () => {
+    it('should return a string of gaRa abbreviations', () => {
+      const clean_input = scanner.clean_input(input_string, 'SLP');
+      const syl_text = scanner.syllabify_text(clean_input);
+      const syl_weights = scanner.scan_syllable_weights(syl_text);
+      const gaRa_abbreviations = [];
+      for (const line of syl_weights.split('\n')) {
+        gaRa_abbreviations.push(scanner.gaRa_abbreviate(line));
+      }
+      const output = gaRa_abbreviations.join('\n');
+      const expected_output = "jrgl\ntsll\nmsgl\nyrlg";
+      expect(output).toEqual(expected_output);
+    });
   });
 
 });

@@ -42,7 +42,7 @@ export class VerseTester {
 
     } else if (new_score === old_score) {
 			// tie, concatenate as old + new
-				Vrs.meter_label += " atha vā " + new_label;
+      Vrs.meter_label += ` atha vā ${new_label}`;
 			// do not change score
     }
   }
@@ -123,6 +123,55 @@ export class VerseTester {
     // currently cannot do just a single imperfect half
 
 		return 0;
+  }
+
+  count_pAdasamatva(Vrs) {
+    /*
+    Accepts four-part (newline-separated) string of light/heavy (l/g) pattern.
+		Since testing for samavṛtta, ignores final anceps syllable in each part.
+		Returns integer 0,2,3,4 indicating size of best matching group.
+    */
+
+    this.pAdasamatva_count = 0;
+
+    // prepare weights-by-pāda for samatva count: omit last anceps syllable
+    let wbp = [];
+    Vrs.syllable_weights.split('\n').forEach((true_wbp) => {
+      wbp.push(true_wbp.slice(0, true_wbp.length - 1));
+    });
+
+    // make sure full four pādas
+    try {
+      wbp[3] !== null;
+    } catch(error) {
+      console.log('Number of pādas is less than 4');
+    }
+
+    // avoid false positive if completely empty string argument list
+    if (wbp[0] === '' && wbp[1] === '' && wbp[2] === '' && wbp[3] === '') {
+      return 0;
+    }
+
+    // discard any empty strings
+    wbp = wbp.filter(char => char !== '');
+
+    // calculate max number of matching pādas in verse
+    const wbp_counts_array = [];
+    for (let i = 0; i < wbp.length; i++) {
+      let temp = 0;
+      wbp.forEach((c) => {
+        if (c === wbp[i]) {
+          temp += 1;
+        }
+        wbp_counts_array.push(temp);
+      });
+    }
+
+    const max_match = Math.max(...wbp_counts_array);
+
+    if (max_match === 2 || max_match === 3 || max_match === 4) {
+      this.pAdasamatva_count = max_match;
+    }
   }
 
 }

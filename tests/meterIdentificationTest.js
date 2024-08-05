@@ -40,7 +40,7 @@ describe('test suite: VerseTest methods', () => {
   });
 
   describe('count_pAdasamatva', () => {
-    it('should return ... ', () => {
+    it('should return 4', () => {
       input_string = `
         sampUrRakumBo na karoti Sabdam
         arDo Gawo GozamupEti nUnam

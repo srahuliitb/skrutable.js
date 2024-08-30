@@ -176,6 +176,53 @@ export class VerseTester {
 
 }
 
+export class MeterIdentifier {
+  /*
+  User-facing agent-style object.
+
+	Primary method identify_meter() accepts string.
+
+	Returns single Verse object, whose attribute meter_label
+	and method summarize() help in revealing identification results.
+  */
+  Scanner = null;
+  VerseTester = null;
+  Verses_found = [];
+
+  wiggle_iterator(start_pos, part_len, resplit_option) {
+    /*
+    E.g., if 'pāda'.length === 10, then from the breaks between each pāda,
+		wiggle as far as 6 in either direction, first right, then left.
+    */
+    let iter_list = [start_pos];
+    let distance_multiplier = 0;
+    if (resplit_option === 'resplit_max') {
+      distance_multiplier = 0.5; // wiggle as far as 50% of part_len
+    } else if (resplit_option === 'resplit_lite') {
+      distance_multiplier = 0.35;
+    }
+    const max_wiggle_distance = Math.floor(part_len * distance_multiplier + 1);
+    for (i = 1; i < max_wiggle_distance; i++) {
+      iter_list.push(start_pos + i);
+      iter_list.push(start_pos - i);
+    }
+    return iter_list;
+  }
+
+  resplit_Verse() {
+    // TODO
+  }
+
+  wiggle_identity() {
+    // TODO
+  }
+
+  identify_meter() {
+    // TODO
+  }
+
+}
+
 /*
 const sc = new Scanner();
 let input_string = `

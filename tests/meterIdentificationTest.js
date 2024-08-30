@@ -1,8 +1,8 @@
 import { Scanner } from '../scripts/scansion.js';
-import { VerseTester } from '../scripts/meterIdentification.js';
+import { VerseTester, MeterIdentifier } from '../scripts/meterIdentification.js';
 import { config } from '../scripts/config.js';
 
-describe('test suite: VerseTest methods', () => {
+describe('test suite: VerseTester methods', () => {
 
   const disable_non_trizwuB_upajAti = config["disable_non_trizwuB_upajAti"];
   const meter_scores = config["meter_scores"]; // dict
@@ -65,6 +65,23 @@ describe('test suite: VerseTest methods', () => {
       VT.count_pAdasamatva(V);
       const output = VT.pAdasamatva_count; // int
       const expected_output = 0;
+      expect(output).toEqual(expected_output);
+    });
+  });
+
+  describe('test_identify_meter_upajAti', () => {
+    it('should return upajāti', () => {
+      input_string = `
+        kolAhale kAkakulasya jAte
+        virAjate kokilakUjitaM kim
+        parasparaM saMvadatAM KalAnAM
+        mOnaM viDeyaM satataM suDIBiH
+      `;
+      MI = new MeterIdentifier();
+      const V = scanner.scan(input_string);
+      object_result = MI.identify_meter(input_string, resplit_option = 'resplit_max');
+      const output = object_result.summarize();
+      const expected_output = 'upajāti';
       expect(output).toEqual(expected_output);
     });
   });

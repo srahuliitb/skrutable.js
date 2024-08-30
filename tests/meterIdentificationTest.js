@@ -49,10 +49,24 @@ describe('test suite: VerseTest methods', () => {
       `;
       const V = scanner.scan(input_string)
       VT.count_pAdasamatva(V);
-      const output = VT.pAdasamatva_count // int
+      const output = VT.pAdasamatva_count; // int
       const expected_output = 4;
       expect(output).toEqual(expected_output);
     });
   });
- 
+
+  describe('count_pAdasamatva_zero', () => {
+    it('should return 0', () => {
+      input_string = `
+        sampUrRakumBo na karoti Sabdam
+      `;
+      const V = scanner.scan(input_string);
+      VT.resplit_option = 'single_pAda';
+      VT.count_pAdasamatva(V);
+      const output = VT.pAdasamatva_count; // int
+      const expected_output = 0;
+      expect(output).toEqual(expected_output);
+    });
+  });
+  
 });
